@@ -41,12 +41,17 @@
           <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number (Optional)</label>
           <input type="tel" id="phone" name="phone" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="(123) 456-7890">
         </div>
-        <!-- Honeypot for spam protection -->
+        <!-- Human challenge -->
+        <div>
+          <label for="securityCheck" class="block text-sm font-medium text-gray-700">What is 5 + 3? (Anti-spam) *</label>
+          <input type="text" id="securityCheck" name="securityCheck" required class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Your answer">
+        </div>
+        <!-- Honeypot -->
         <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
         <button type="submit" class="w-full bg-orange-500 text-white font-bold py-2 px-4 rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500">Share Your Story</button>
       </form>
       <p id="thankYouMsg" class="hidden text-green-600 font-semibold text-center mt-4">
-        ✅ Thank you for submitting! Be sure to join the National TOWNHALL podcast, Thursdays at 9PM EST.
+        ✅ Thank you for submitting! Redirecting to the National TOWNHALL podcast...
       </p>
       <p id="errorMsg" class="hidden text-red-600 font-semibold text-center mt-4"></p>
     </div>
@@ -76,6 +81,7 @@
         });
 
         if (response.ok) {
+          alert('✅ Thank you for your submission! Redirecting you now.');
           thankYou.classList.remove('hidden');
           form.reset();
           window.open('https://redamericafirst.com', '_blank');
