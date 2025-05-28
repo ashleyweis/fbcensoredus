@@ -41,13 +41,14 @@
           <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number (Optional)</label>
           <input type="tel" id="phone" name="phone" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="(123) 456-7890">
         </div>
-        <!-- Honeypot field for spam protection -->
+        <!-- Honeypot for spam protection -->
         <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
         <button type="submit" class="w-full bg-orange-500 text-white font-bold py-2 px-4 rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500">Share Your Story</button>
       </form>
       <p id="thankYouMsg" class="hidden text-green-600 font-semibold text-center mt-4">
         ✅ Thank you for submitting! Be sure to join the National TOWNHALL podcast, Thursdays at 9PM EST.
       </p>
+      <p id="errorMsg" class="hidden text-red-600 font-semibold text-center mt-4"></p>
     </div>
   </div>
   <footer class="bg-gray-800 text-white text-center py-4">
@@ -60,9 +61,12 @@
 
       const form = e.target;
       const formData = new FormData(form);
-
-      // Convert form data to JSON
       const data = Object.fromEntries(formData.entries());
+
+      const thankYou = document.getElementById('thankYouMsg');
+      const errorMsg = document.getElementById('errorMsg');
+      thankYou.classList.add('hidden');
+      errorMsg.classList.add('hidden');
 
       try {
         const response = await fetch('/api/save', {
@@ -72,14 +76,18 @@
         });
 
         if (response.ok) {
-          document.getElementById('thankYouMsg').classList.remove('hidden');
-          window.open('https://redamericafirst.com', '_blank');
+          thankYou.classList.remove('hidden');
           form.reset();
+          window.open('https://redamericafirst.com', '_blank');
         } else {
-          alert('Error submitting form. Please try again.');
+          const errorData = await response.json();
+          const message = errorData?.error || 'Submission failed without a message.';
+          errorMsg.textContent = '⚠️ ' + message;
+          errorMsg.classList.remove('hidden');
         }
       } catch (err) {
-        alert('Submission failed. Please check your connection.');
+        errorMsg.textContent = '⚠️ Network or server error: ' + err.message;
+        errorMsg.classList.remove('hidden');
       }
     });
   </script>
