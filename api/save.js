@@ -3,7 +3,20 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const { name, email, censorship, address = '', phone = '' } = req.body;
+  // Support both JSON and form-urlencoded (HTML form post)
+  let body = req.body;
+  if (req.headers['content-type']?.includes('application/x-www-form-urlencoded')) {
+    const chunks = [];
+    for await (const chunk of req) chunks.push(chunk);
+    const raw = Buffer.concat(chunks).toString();
+    body = Object.fromEntries(new URLSearchParams(raw));
+  }
+
+  if (body._gotcha) {
+    return res.status(200).json({ success: true }); // honeypot spam filter
+  }
+
+  const { name, email, censorship, address = '', phone = '' } = body;
 
   if (!name || !email || !censorship) {
     return res.status(400).json({ error: 'Missing required fields' });
@@ -11,8 +24,8 @@ export default async function handler(req, res) {
 
   const line = `"${name}","${email}","${censorship.replace(/"/g, '""')}","${address}","${phone}","${new Date().toISOString()}"\n`;
 
-  const repo = process.env.GH_REPO; // e.g., username/repo
-  const path = process.env.GH_FILE_PATH; // e.g., submissions.csv
+  const repo = process.env.GH_REPO;
+  const path = process.env.GH_FILE_PATH;
   const token = process.env.GH_TOKEN;
 
   const apiUrl = `https://api.github.com/repos/${repo}/contents/${path}`;
@@ -24,32 +37,38 @@ export default async function handler(req, res) {
 
   try {
     const response = await fetch(apiUrl, { headers });
-    if (!response.ok) throw new Error('Failed to fetch existing file');
+    const data = await response.json();
 
-    const { content, sha } = await response.json();
-    const decoded = Buffer.from(content, 'base64').toString('utf-8');
+    if (!response.ok || !data.sha || !data.content) {
+      console.error('GitHub file read error:', data);
+      return res.status(500).json({ error: 'Unable to read CSV file from GitHub', details: data });
+    }
+
+    const decoded = Buffer.from(data.content, 'base64').toString('utf-8');
     const updated = decoded + line;
     const base64 = Buffer.from(updated).toString('base64');
 
-    const body = {
-      message: `Add submission from ${email}`,
+    const commit = {
+      message: `New signup from ${email}`,
       content: base64,
-      sha: sha,
+      sha: data.sha,
     };
 
     const updateRes = await fetch(apiUrl, {
       method: 'PUT',
       headers,
-      body: JSON.stringify(body),
+      body: JSON.stringify(commit),
     });
 
     if (!updateRes.ok) {
-      const error = await updateRes.text();
-      return res.status(500).json({ error: 'GitHub update failed', details: error });
+      const errorDetails = await updateRes.text();
+      console.error('GitHub write error:', errorDetails);
+      return res.status(500).json({ error: 'Failed to update CSV on GitHub', details: errorDetails });
     }
 
     return res.status(200).json({ success: true });
   } catch (err) {
+    console.error('Unexpected error:', err);
     return res.status(500).json({ error: err.message || 'Unknown error' });
   }
 }
