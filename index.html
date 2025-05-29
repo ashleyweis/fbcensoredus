@@ -1,9 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Join Our Potential Lawsuit Against Facebook</title>
+  <title>Facebook Censorship Lawsuit: Join the Class Action</title>
+  <meta name="description" content="Join our class action lawsuit against Facebook censorship. Share your story about Big Tech fact-checkers and political discrimination.">
+  <meta name="keywords" content="Facebook censorship, class action lawsuit, Big Tech fact checkers, political discrimination">
+  <!-- Open Graph Tags for Social Media Sharing -->
+  <meta property="og:title" content="Facebook Censorship Lawsuit: Join the Class Action"/>
+  <meta property="og:description" content="Share your story of Facebook censorship and join our class action lawsuit against Big Tech fact-checkers. Fight political discrimination now!"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://FBcensoredUS.com"/>
+  <meta property="og:image" content="https://FBcensoredUS.com/images/socialmediatag_FBcensoredUS.jpg"/>
+  <!-- Twitter Card Tags for X Sharing -->
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Facebook Censorship Lawsuit: Join the Class Action"/>
+  <meta name="twitter:description" content="Join our lawsuit against Facebook censorship and Big Tech fact-checkers. Share your story of political discrimination today!"/>
+  <meta name="twitter:image" content="https://FBcensoredUS.com/images/socialmediatag_FBcensoredUS.jpg"/>
+  <!-- Robots and Canonical Tags -->
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://FBcensoredUS.com"/>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
@@ -12,89 +26,3 @@
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gray-100">
-  <div class="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-500 to-blue-300">
-    <div class="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full mx-4">
-      <h1 class="text-3xl font-bold text-center text-gray-800 mb-4">Censored by Facebook?</h1>
-      <h2 class="text-xl text-center text-gray-600 mb-6">Join Our Fight Against Political Discrimination</h2>
-      <p class="text-gray-700 mb-6 text-center">
-        If Facebook has censored your posts or discriminated against you based on your political beliefs, share your story to join our potential class action lawsuit.
-      </p>
-      <form id="signupForm" class="space-y-4">
-        <div>
-          <label for="name" class="block text-sm font-medium text-gray-700">Full Name *</label>
-          <input type="text" id="name" name="name" required class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="John Doe">
-        </div>
-        <div>
-          <label for="email" class="block text-sm font-medium text-gray-700">Email Address *</label>
-          <input type="email" id="email" name="email" required class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="you@example.com">
-        </div>
-        <div>
-          <label for="censorship" class="block text-sm font-medium text-gray-700">Why Did Facebook Censor You? *</label>
-          <textarea id="censorship" name="censorship" required rows="4" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Describe your experience (e.g., post removed, account restricted)"></textarea>
-        </div>
-        <div>
-          <label for="address" class="block text-sm font-medium text-gray-700">Address/State (Optional)</label>
-          <input type="text" id="address" name="address" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="123 Main St, City, State">
-        </div>
-        <div>
-          <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number (Optional)</label>
-          <input type="tel" id="phone" name="phone" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="(123) 456-7890">
-        </div>
-        <!-- Human challenge -->
-        <div>
-          <label for="securityCheck" class="block text-sm font-medium text-gray-700">What is 5 + 3? (Anti-spam) *</label>
-          <input type="text" id="securityCheck" name="securityCheck" required class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Your answer">
-        </div>
-        <!-- Honeypot -->
-        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
-        <button type="submit" class="w-full bg-orange-500 text-white font-bold py-2 px-4 rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500">Share Your Story</button>
-      </form>
-      <p id="thankYouMsg" class="hidden text-green-600 font-semibold text-center mt-4">
-        ✅ Thank you for submitting! Redirecting to the National TOWNHALL podcast...
-      </p>
-      <p id="errorMsg" class="hidden text-red-600 font-semibold text-center mt-4"></p>
-    </div>
-  </div>
-  <footer class="bg-gray-800 text-white text-center py-4">
-    <p class="text-sm">© 2025 RAF. All rights reserved. <!-- No privacy link shown until policy is available -<a href="/privacy" class="underline">Privacy Policy</a></p> -->
-  </footer>
-  <script>
-    document.getElementById('signupForm').addEventListener('submit', async function (e) {
-      e.preventDefault();
-
-      const form = e.target;
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
-
-      const thankYou = document.getElementById('thankYouMsg');
-      const errorMsg = document.getElementById('errorMsg');
-      thankYou.classList.add('hidden');
-      errorMsg.classList.add('hidden');
-
-      try {
-        const response = await fetch('/api/save', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-
-        if (response.ok) {
-          alert('✅ Thank you for your submission! Redirecting you now.');
-          thankYou.classList.remove('hidden');
-          form.reset();
-          window.open('https://redamericafirst.com', '_blank');
-        } else {
-          const errorData = await response.json();
-          const message = errorData?.error || 'Submission failed without a message.';
-          errorMsg.textContent = '⚠️ ' + message;
-          errorMsg.classList.remove('hidden');
-        }
-      } catch (err) {
-        errorMsg.textContent = '⚠️ Network or server error: ' + err.message;
-        errorMsg.classList.remove('hidden');
-      }
-    });
-  </script>
-</body>
-</html>
